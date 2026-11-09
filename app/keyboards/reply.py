@@ -1,11 +1,8 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from app.services.texts import (
+FAQ_BUTTON_TEXT, ABOUT_BUTTON_TEXT, CONTACT_BUTTON_TEXT, MENU_BUTTON_TEXT, HELP_BUTTON_TEXT, INFO_BUTTON_TEXT
+)
 
-FAQ_BUTTON_TEXT = "faq"
-ABOUT_BUTTON_TEXT = "о нас"
-CONTACT_BUTTON_TEXT = "связаться"
-MENU_BUTTON_TEXT = "главное меню"
-HELP_BUTTON_TEXT = "помощь"
-INFO_BUTTON_TEXT = "информация"
 
 faq_button = KeyboardButton(text=FAQ_BUTTON_TEXT)
 about_button = KeyboardButton(text=ABOUT_BUTTON_TEXT)

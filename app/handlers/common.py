@@ -4,6 +4,7 @@ from aiogram.filters.command import Command
 from app.keyboards.reply import main_menu_keyboard, help_menu_keyboard
 from app.keyboards.inline import demo_inline_keyboard
 from app.utils.fox import async_fox
+from app.front.bot_entrypoint import logger
 
 
 router = Router()
@@ -11,11 +12,13 @@ router = Router()
 @router.message(Command('start'))
 async def command_start(message: types.Message):
     #print(message.chat.first_name)
+    logger.info('Хэндлер /start запущен')
     await message.answer(f"Привет! {message.chat.first_name}", reply_markup=main_menu_keyboard)
 
 
 @router.message(Command('info'))
 async def command_info(message: types.Message):
+    logger.info('Хэндлер /info запущен')
     text = """
     Я бот ассистент
     """
@@ -23,17 +26,20 @@ async def command_info(message: types.Message):
 
 @router.message(Command('help'))
 async def command_help(message: types.Message):
+        logger.info('Хэндлер /help запущен')
         text = """
         Что я умею
         1) /start - запуск бота и приветствие
         2) /info - информация о боте
         3) /help - помощь
+        4) /prof - анкета выбора профессии
         """
         await message.answer(f"{text}", reply_markup=help_menu_keyboard)
 
 @router.message(Command('fox'))
 @router.message(Command('лиса'))
 async def command_fox(message: types.Message):
+    logger.info('Хэндлер /fox запущен')
     image_fox = await async_fox()
     #print(image_fox)
     await message.answer_photo(image_fox)

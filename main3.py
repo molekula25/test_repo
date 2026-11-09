@@ -1,28 +1,42 @@
 import asyncio
 import logging
+from logging import info
+
 from aiogram import Bot, Dispatcher
+from aiogram.fsm.storage.memory import MemoryStorage
 
 
 from app.config import APP_NAME, telegram_bot_token
-from app.handlers.common import router as command_router
-from app.handlers.bot_message import router as massage_router
-from app.handlers.bot_photo import router as photo_router
-from app.handlers.call_back_handler import router as callback_router
+from app.handlers.routers import root_router
+from app.front.bot_entrypoint import setup_logging, logger
+
 
 
 
 async def main():
-    logging.basicConfig(level=logging.INFO)
+
+    if not telegram_bot_token:
+        raise RuntimeError('Не найден telegram_bot_token')
+
+    #logging.basicConfig(level=logging.INFO)
+    setup_logging()
+    logger.info('Бот запущен')
+
     bot = Bot(token=telegram_bot_token)
-    dp = Dispatcher()
 
-    dp.include_router(command_router)
-    dp.include_router(massage_router)
-    dp.include_router(photo_router)
-    dp.include_router(callback_router_router)
+    storage = MemoryStorage()
 
-    await dp.start_polling(bot)
+    dp = Dispatcher(storage=storage)
 
+    dp.include_router(root_router)
+
+    try:
+        logger.info('Запуск long polling')
+        await dp.start_polling(bot)
+    except Exception as e:
+        logger.exception(f"Неожиданная ошибка{e}")
+    finally:
+        logger.info('Остановка бота')
 if __name__ == '__main__':
     asyncio.run(main())
 
